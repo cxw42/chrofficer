@@ -1,8 +1,9 @@
 {
   "name": "Chrofficer",
-  "version": "0.4",
+  "version": "0.5",
   "manifest_version": 2,
-  "description": "Office 365 webmail thingy. Notifications or somethin'.",
+  "minimum_chrome_version": "50",
+  "description": "Office 365 webmail thingy. Notifications or somethin'.  (2019 version)",
   "browser_action": {
     "default_icon": "browser-action-icon-inactive.png" 
   },
@@ -10,7 +11,7 @@
     "scripts": ["background.js"]
   },
   "content_scripts": [{
-    "matches": ["*://*.outlook.com/*", "*://*.office365.com/*"],
+    "matches": ["*://*.outlook.com/*", "*://*.office365.com/*", "*://*.office.com/*"],
     "js": ["content.js"]
   }],
   "permissions": [
@@ -18,7 +19,8 @@
     "webRequest",
     "notifications",
     "*://*.office365.com/*",
-    "*://*.outlook.com/"
+    "*://*.outlook.com/",
+    "*://*.office.com/"
   ],
   "web_accessible_resources" : [
     "app.png",
