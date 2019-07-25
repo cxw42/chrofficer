@@ -27,26 +27,35 @@ chrome.runtime.onMessage.addListener(function(msg, sender, respond) {
 
   // Find the reminders therein
   matches = document.evaluate(
-    './/button[@data-storybook="reminder"]//div[@class and not(@id)]/text()',
+    './/button[@data-storybook="reminder"]//div[@class and not(@id) and ./text()]/../div',
     pane,
     null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 
-  if(!matches || (matches.snapshotLength % 3)) {
-    console.warn('Could not find any reminders');
+  console.info(`Found ${matches.snapshotLength} reminder div items`);
+  if(!matches || (matches.snapshotLength % 4)) {
+    console.warn(`Could not find reminders`);
+    respond({msg: 'calendar_notify', reminders: [
+      {
+        title: 'Unknown reminder',
+        start_time: 'Please check the Outlook window',
+        relative_time: "I couldn't understand the notification format",
+        location: '<unknown location>',
+      }
+    ]});
     return;
   }
 
   // Gather up the text.  Three rows per reminder.
-  const field_names = ['title', 'relative_time', 'start_time'];
+  const field_names = ['title', 'relative_time', 'start_time', 'location'];
 
   let eles = [];
   for(let match_idx = 0; match_idx < matches.snapshotLength; ++match_idx) {
-    let ele_idx = Math.floor(match_idx/3);
+    let ele_idx = Math.floor(match_idx/field_names.length);
     if(!eles[ele_idx]) {
       eles[ele_idx] = {};
     }
 
-    eles[ele_idx][field_names[match_idx%3]] =
+    eles[ele_idx][field_names[match_idx % field_names.length]] =
       matches.snapshotItem(match_idx).textContent;
   }
 

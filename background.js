@@ -18,13 +18,24 @@ function callback(details) {
       //}
       chrome.tabs.sendMessage(details.tabId, "calendar_notify", function (resp) {
         resp.reminders.forEach(function(item) {
+
+          let context_msg = `${item.start_time} (${item.relative_time})`;
+          if(item.location) {
+            context_msg += ` at/in ${item.location}`;
+          }
+
+          let title_msg = 'Calendar Reminder';
+          if(resp.reminders.length>1) {
+            title_msg += ' (check the tray for more)';
+          }
+
           let notification_id = chrome.notifications.create(  // TODO add notification ID
             {
               type: 'basic',
               iconUrl: chrome.extension.getURL('/app.png'),
-              title: 'Calendar Reminder',
+              title: title_msg,
               message: item.title,
-              contextMessage: `${item.start_time} (${item.relative_time})`,
+              contextMessage: context_msg,
               requireInteraction: true,   // Requires Chrome 50+
             }
           );
