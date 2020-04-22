@@ -17,14 +17,14 @@ function callback(details) {
       //  return;
       //}
       chrome.tabs.sendMessage(details.tabId, "calendar_notify", function (resp) {
-        resp.reminders.forEach(function(item) {
+        resp.reminders.forEach(function(item, index) {
 
           let context_msg = `${item.start_time} (${item.relative_time})`;
           if(item.location) {
             context_msg += ` at/in ${item.location}`;
           }
 
-          let title_msg = 'Calendar Reminder';
+          let title_msg = `Calendar Reminder ${index}`;
           if(resp.reminders.length>1) {
             title_msg += ' (check the tray for more)';
           }
