@@ -20,6 +20,7 @@
     "notifications",
     "*://*.office365.com/*",
     "*://*.outlook.com/",
+    "*://*.office.net/",
     "*://*.office.com/"
   ],
   "web_accessible_resources" : [
